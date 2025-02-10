@@ -57,6 +57,17 @@ public class Ball : MonoBehaviour
 
     }
     
-   
+      private void OnCollisionEnter(Collision other)
+      {
+        if(other.gameObject.tag == "Ground")
+        {
+         other.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+      }
+
+      private void Constraints()
+      {
+        rb.constraints = RigidbodyConstraints.FreezePositionY | rb.constraints = RigidbodyConstraints.FreezeRotation;        
+      }
 
 }
