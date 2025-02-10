@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Roller Splat Game.sln"
+    "dotnet.defaultSolution": "Roller-Splat-Game.sln"
 }

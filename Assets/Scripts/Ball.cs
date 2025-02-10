@@ -13,10 +13,9 @@ public class Ball : MonoBehaviour
     
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>(); // Rigidbody atanmazsa hata alırsın, bunu ekledim.
     }
 
-    
     void Update()
     {
         Swipe();
@@ -24,50 +23,51 @@ public class Ball : MonoBehaviour
 
     private void Swipe()
     {
-       if(Input.GetMouseButtonDown(0))
-       {
-         firstPos = new Vector2(Input.MousePosition.x , Input.MousePosition.x);
-       }
-
-        if(Input.GetMouseButtonUp(0))
-       {
-         secondPos = new Vector2(Input.MousePosition.x , Input.MousePosition.x);
-       }
-
-       currentPos = new Vector2(secondPos.x - firstPos.x , secondPos.y - firstPos.y);
-
-       currentPos.Normalize();
-
-       if(currentPos.y < 0 && currentPos.x < 0.5f && currentPos.x > 0.5f ) //back
-       {
-          rb.velocity = Vector3.back * speed;
-       }
-       else if(currentPos.y > 0  && currentPos.x < 0.5f && currentPos.x > 0.5f) //forward
-       {
-        rb.velocity = Vector3.forward * speed;
-       }
-       else if(currentPos.x < 0 && currentPos.y < 0.5f && currentPos.y > 0.5f) // left
-       {
-        rb.velocity = Vector3.left * speed;
-       }
-       else if(currentPos.x > 0 && currentPos.y < 0.5f && currentPos.y > 0.5f) // right
-       {
-        rb.velocity = Vector3.right * speed;
-       }
-
-    }
-    
-      private void OnCollisionEnter(Collision other)
-      {
-        if(other.gameObject.tag == "Ground")
+        if (Input.GetMouseButtonDown(0))
         {
-         other.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            firstPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         }
-      }
 
-      private void Constraints()
-      {
-        rb.constraints = RigidbodyConstraints.FreezePositionY | rb.constraints = RigidbodyConstraints.FreezeRotation;        
-      }
+        if (Input.GetMouseButtonUp(0))
+        {
+            secondPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
+            currentPos = new Vector2(secondPos.x - firstPos.x, secondPos.y - firstPos.y);
+            currentPos = currentPos.normalized; // Normalize işlemi doğru yapıldı.
+
+            if (currentPos.y < -0.5f && Mathf.Abs(currentPos.x) < 0.5f) // Back
+            {
+                rb.velocity = Vector3.back * speed;
+            }
+            else if (currentPos.y > 0.5f && Mathf.Abs(currentPos.x) < 0.5f) // Forward
+            {
+                rb.velocity = Vector3.forward * speed;
+            }
+            else if (currentPos.x < -0.5f && Mathf.Abs(currentPos.y) < 0.5f) // Left
+            {
+                rb.velocity = Vector3.left * speed;
+            }
+            else if (currentPos.x > 0.5f && Mathf.Abs(currentPos.y) < 0.5f) // Right
+            {
+                rb.velocity = Vector3.right * speed;
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground")) // Doğru ve hızlı tag kontrolü için CompareTag kullan.
+        {
+            MeshRenderer meshRenderer = other.gameObject.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.material.color = Color.red;
+            }
+        }
+    }
+
+    private void Constraints()
+    {
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;        
+    }
 }
