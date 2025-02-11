@@ -2,75 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class Ball : MonoBehaviour
 {
-    public Rigidbody _rb;
-    private GameManager _gm;
-    public Image _scoreBar;
-    public float _moveSpeed;
-    private Vector2 _firstPos;
-    private Vector2 _secondPos;
-    public Vector2 _currentPos;
-    public float _currentGroundNumber;
+    public Rigidbody rb; // Rigidbody component
+    private GameManager gm; // Reference to the GameManager script
+    public Image scoreBar; // UI score bar
+    public float moveSpeed; // Movement speed of the ball
+    private Vector2 firstPos; // First touch position
+    private Vector2 secondPos; // Second touch position
+    public Vector2 currentPos; // Current swipe direction
+    public float currentGroundNumber; // Number of ground tiles the ball has touched
 
     void Start() {
-        _gm = GameObject.FindObjectOfType<GameManager>();
+        gm = GameObject.FindObjectOfType<GameManager>(); // Find the GameManager instance
     }
+    
     void Update()
     {
-        Swipe();
-        _scoreBar.fillAmount = _currentGroundNumber / _gm.groundNumber;
-        // if(_scoreBar.fillAmount == 1) {
-        //     _gm.LevelUpdate();
+        Swipe(); // Handle swipe input
+        scoreBar.fillAmount = currentGroundNumber / gm.groundNumber; // Update score bar
+        // if(scoreBar.fillAmount == 1) {
+        //     gm.LevelUpdate(); // Uncomment if level progression is needed
         // } 
     }
 
     private void Swipe() {
         if(Input.GetMouseButtonDown(0)) {
-            _firstPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Debug.Log(_firstPos);
+            firstPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y); // Store the first touch position
+            Debug.Log(firstPos);
         }
 
         if(Input.GetMouseButtonUp(0)) {
-            _secondPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            secondPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y); // Store the second touch position
 
-            _currentPos = new Vector2(
-                _secondPos.x - _firstPos.x,
-                _secondPos.y - _firstPos.y
+            currentPos = new Vector2(
+                secondPos.x - firstPos.x,
+                secondPos.y - firstPos.y
             );
 
-            _currentPos.Normalize();
+            currentPos.Normalize(); // Normalize the swipe direction
         }
 
-        if(_currentPos.y > 0 && _currentPos.x > -0.5f && _currentPos.x < 0.5f) {
-            // Forward
-            _rb.velocity = Vector3.forward * _moveSpeed;
+        // Determine the movement direction based on swipe
+        if(currentPos.y > 0 && currentPos.x > -0.5f && currentPos.x < 0.5f) {
+            rb.velocity = Vector3.forward * moveSpeed; // Move forward
         }
-        else if(_currentPos.y < 0 && _currentPos.x > -0.5f && _currentPos.x < 0.5f) {
-            // Back
-            _rb.velocity = Vector3.back * _moveSpeed;
+        else if(currentPos.y < 0 && currentPos.x > -0.5f && currentPos.x < 0.5f) {
+            rb.velocity = Vector3.back * moveSpeed; // Move backward
         }
-        else if(_currentPos.x > 0 && _currentPos.y > -0.5f && _currentPos.y < 0.5f) {
-            // Right
-            _rb.velocity = Vector3.right * _moveSpeed;
+        else if(currentPos.x > 0 && currentPos.y > -0.5f && currentPos.y < 0.5f) {
+            rb.velocity = Vector3.right * moveSpeed; // Move right
         }
-        else if(_currentPos.x < 0 && _currentPos.y > -0.5f && _currentPos.y < 0.5f) {
-            // Left
-            _rb.velocity = Vector3.left * _moveSpeed;
+        else if(currentPos.x < 0 && currentPos.y > -0.5f && currentPos.y < 0.5f) {
+            rb.velocity = Vector3.left * moveSpeed; // Move left
         }
     }
 
     private void OnCollisionEnter(Collision other) {
+        // Check if the ground tile has already been visited (red color)
         if(other.gameObject.GetComponent<MeshRenderer>().material.color != Color.red) {
             if(other.gameObject.tag == "Ground") {
-                Constraints();
-                other.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                _currentGroundNumber++;
+                Constraints(); // Apply movement constraints
+                other.gameObject.GetComponent<MeshRenderer>().material.color = Color.red; // Change ground color to red
+                currentGroundNumber++; // Increment ground counter
             }
         }
     }
 
     private void Constraints() {
-        _rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation; // Restrict movement
     }
 }
