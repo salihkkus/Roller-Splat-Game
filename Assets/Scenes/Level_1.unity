@@ -1786,11 +1786,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdbe860f2add1c4eb7daf2ae040fe08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 500117022}
-  _scoreBar: {fileID: 1854376112}
-  _moveSpeed: 20
-  _currentPos: {x: 0, y: 0}
-  _currentGroundNumber: 0
+  rb: {fileID: 500117022}
+  scoreBar: {fileID: 1854376112}
+  moveSpeed: 20
+  currentPos: {x: 0, y: 0}
+  currentGroundNumber: 0
 --- !u!1001 &556938077
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4244,7 +4244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a0bc8aae586e9489cf530e5eea5405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grounds: []
+  grounds: []
   groundNumber: 0
 --- !u!114 &1435476599
 MonoBehaviour:
@@ -4258,7 +4258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a0bc8aae586e9489cf530e5eea5405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grounds: []
+  grounds: []
   groundNumber: 0
 --- !u!1 &1443575243
 GameObject:
@@ -5847,7 +5847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: af8070025df2b474bb982ed62fa7232a, type: 2}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -5861,7 +5861,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 230
+    m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
