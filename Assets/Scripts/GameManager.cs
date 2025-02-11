@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject[] grounds;
+    public float groundNumber;
     void Start()
     {
-        
+        grounds = GameObject.FindGameObjectsWithTag("Ground");
+        Debug.Log("Parça" + grounds.Length);
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
         
