@@ -10,10 +10,12 @@ public class Ball : MonoBehaviour
     private Vector2 secondPos;
     private Vector2 currentPos;
     public float speed;
+    public float currentgroundnumber;
     
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // Rigidbody atanmazsa hata alırsın, bunu ekledim.
+        rb = GetComponent<Rigidbody>();
+        Constraints(); // Başlangıçta Constraints ayarlarını uygula
     }
 
     void Update()
@@ -31,43 +33,49 @@ public class Ball : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             secondPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            currentPos = (secondPos - firstPos).normalized; 
 
-            currentPos = new Vector2(secondPos.x - firstPos.x, secondPos.y - firstPos.y);
-            currentPos = currentPos.normalized; // Normalize işlemi doğru yapıldı.
+            Vector3 moveDirection = Vector3.zero;
 
             if (currentPos.y < -0.5f && Mathf.Abs(currentPos.x) < 0.5f) // Back
             {
-                rb.velocity = Vector3.back * speed;
+                moveDirection = Vector3.back;
             }
             else if (currentPos.y > 0.5f && Mathf.Abs(currentPos.x) < 0.5f) // Forward
             {
-                rb.velocity = Vector3.forward * speed;
+                moveDirection = Vector3.forward;
             }
             else if (currentPos.x < -0.5f && Mathf.Abs(currentPos.y) < 0.5f) // Left
             {
-                rb.velocity = Vector3.left * speed;
+                moveDirection = Vector3.left;
             }
             else if (currentPos.x > 0.5f && Mathf.Abs(currentPos.y) < 0.5f) // Right
             {
-                rb.velocity = Vector3.right * speed;
+                moveDirection = Vector3.right;
             }
+
+            // Hareket vektörünü düz bir çizgide tut
+            rb.velocity = new Vector3(moveDirection.x * speed, rb.velocity.y, moveDirection.z * speed);
         }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground")) // Doğru ve hızlı tag kontrolü için CompareTag kullan.
+        if (other.gameObject.CompareTag("Ground")) 
         {
             MeshRenderer meshRenderer = other.gameObject.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
             {
                 meshRenderer.material.color = Color.red;
+                currentgroundnumber++;
             }
         }
     }
 
     private void Constraints()
     {
-        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;        
+        rb.constraints = RigidbodyConstraints.FreezePositionY | 
+                         RigidbodyConstraints.FreezeRotationX | 
+                         RigidbodyConstraints.FreezeRotationZ;
     }
 }
